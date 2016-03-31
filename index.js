@@ -32,8 +32,10 @@ fs
 // return;
 
 var batch = [];
-while (batch.length<50000) {
-    batch = batch.concat(randomExt.integerArray(5000, 999))
+var step = 5000;
+var final = 15000;
+while (batch.length<final) {
+    batch = batch.concat(randomExt.integerArray(step, 999))
     console.log('n = ' + batch.length)
     algos.map(algo => {
         var timeStart = Date.now()
