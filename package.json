@@ -1,0 +1,14 @@
+{
+  "name": "algo-analyzer",
+  "version": "1.0.0",
+  "description": "Analyzes and compares algorithms",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "random-ext": "^2.5.1"
+  }
+}
