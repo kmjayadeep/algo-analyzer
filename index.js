@@ -32,20 +32,34 @@ fs
 // return;
 
 var batch = [];
-while (batch.length<50000) {
-    batch = batch.concat(randomExt.integerArray(5000, 999))
-    console.log('n = ' + batch.length)
+var step = 5000;
+var final = 100000;
+var points = [];
+var titles = [];
+titles.push("Batch Length")
+algos.map(algo => {
+    titles.push(algo.name);
+})
+points.push(titles);
+while (batch.length<final) {
+    batch = batch.concat(randomExt.integerArray(step, 999))
+    // console.log('n = ' + batch.length)
+    var vertical = [];
+    vertical.push(batch.length);
     algos.map(algo => {
         var timeStart = Date.now()
         algo.fun(batch)
         var timeDiff = Date.now() - timeStart
-        console.log(algo.name + '\t' + timeDiff)
+        // console.log(algo.name + '\t' + timeDiff)
         algo.result.push({
             input: batch.length,
             time: timeDiff
         })
+        vertical.push(timeDiff);
         return algo
     })
+    points.push(vertical);
 }
 
+console.log("result=\'"+JSON.stringify(points)+"\';");
 // console.log(JSON.stringify(algos))
