@@ -33,21 +33,33 @@ fs
 
 var batch = [];
 var step = 5000;
-var final = 15000;
+var final = 100000;
+var points = [];
+var titles = [];
+titles.push("Batch Length")
+algos.map(algo => {
+    titles.push(algo.name);
+})
+points.push(titles);
 while (batch.length<final) {
     batch = batch.concat(randomExt.integerArray(step, 999))
-    console.log('n = ' + batch.length)
+    // console.log('n = ' + batch.length)
+    var vertical = [];
+    vertical.push(batch.length);
     algos.map(algo => {
         var timeStart = Date.now()
         algo.fun(batch)
         var timeDiff = Date.now() - timeStart
-        console.log(algo.name + '\t' + timeDiff)
+        // console.log(algo.name + '\t' + timeDiff)
         algo.result.push({
             input: batch.length,
             time: timeDiff
         })
+        vertical.push(timeDiff);
         return algo
     })
+    points.push(vertical);
 }
 
+console.log("result=\'"+JSON.stringify(points)+"\';");
 // console.log(JSON.stringify(algos))
