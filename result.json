@@ -1,0 +1,13 @@
+[ 'Batch Length',
+  'bubbleSort',
+  'cocktailSort',
+  'combSort',
+  'countSort',
+  'gnomeSort',
+  'heapSort',
+  'insertionSort',
+  'magicSort',
+  'mergeSort',
+  'pancakeSort',
+  'selectionSort',
+  'shellSort' ]

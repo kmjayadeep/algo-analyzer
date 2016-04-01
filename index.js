@@ -6,18 +6,19 @@ var algos = []
 fs
     .readdirSync(__dirname + '/algorithms')
     .forEach(function(file) {
-        var al = require(path.join(__dirname + '/algorithms', file));
+        var fileJson = require(path.join(__dirname + '/algorithms', file));
         algos.push({
-            name: file.slice(0, al.length - 4),
-            fun: al,
-            result: []
+            name: file.slice(0, file.length - 3),
+            fun: fileJson.function,
+            result: [],
+            ignore: fileJson.ignore
         })
     });
 
 
 // var batch = randomExt.integerArray(20000, 999);
 // console.log(batch)
-    // console.log(algos[0].fun(batch))
+// console.log(algos[0].fun(batch))
 
 // console.log(batch.length)
 // var timeStart = Date.now()
@@ -38,28 +39,32 @@ var points = [];
 var titles = [];
 titles.push("Batch Length")
 algos.map(algo => {
-    titles.push(algo.name);
+    if (!algo.ignore)
+        titles.push(algo.name);
 })
+console.log(titles)
 points.push(titles);
-while (batch.length<final) {
+while (batch.length < final) {
     batch = batch.concat(randomExt.integerArray(step, 999))
     console.error('n = ' + batch.length)
     var vertical = [];
     vertical.push(batch.length);
     algos.map(algo => {
-        var timeStart = Date.now()
-        algo.fun(batch)
-        var timeDiff = Date.now() - timeStart
-        console.error(algo.name + '\t' + timeDiff)
-        algo.result.push({
-            input: batch.length,
-            time: timeDiff
-        })
-        vertical.push(timeDiff);
+        if (!algo.ignore) {
+            var timeStart = Date.now()
+            algo.fun(batch)
+            var timeDiff = Date.now() - timeStart
+            console.error(algo.name + '\t' + timeDiff)
+            algo.result.push({
+                input: batch.length,
+                time: timeDiff
+            })
+            vertical.push(timeDiff);
+        }
         return algo
     })
     points.push(vertical);
 }
 
-console.log("result=\'"+JSON.stringify(points)+"\';");
+console.log("result=\'" + JSON.stringify(points) + "\';");
 // console.log(JSON.stringify(algos))

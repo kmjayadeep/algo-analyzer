@@ -1,10 +1,12 @@
-module.exports = function mergeSort(arr) {
-    if (arr.length < 2)
-        return arr;
-    var middle = parseInt(arr.length / 2);
-    var left = arr.slice(0, middle);
-    var right = arr.slice(middle, arr.length);
-    return merge(mergeSort(left), mergeSort(right));
+module.exports = {
+    "function": function mergeSort(arr) {
+        if (arr.length < 2)
+            return arr;
+        var middle = parseInt(arr.length / 2);
+        var left = arr.slice(0, middle);
+        var right = arr.slice(middle, arr.length);
+        return merge(mergeSort(left), mergeSort(right));
+    }
 }
 
 function merge(left, right) {
