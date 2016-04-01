@@ -42,7 +42,6 @@ algos.map(algo => {
     if (!algo.ignore)
         titles.push(algo.name);
 })
-console.log(titles)
 points.push(titles);
 while (batch.length < final) {
     batch = batch.concat(randomExt.integerArray(step, 999))
