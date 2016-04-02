@@ -34,8 +34,8 @@ fs
 
 var batch = [];
 var range = 999;
-var step = 1000;
-var final = 100000;
+var step = 5000;
+var final = 50000;
 var points = [];
 var titles = [];
 titles.push("Batch Length")
@@ -66,5 +66,5 @@ while (batch.length < final) {
     points.push(vertical);
 }
 
-console.log("result=\'" + JSON.stringify(points) + "\';");
+console.log("result.push(\'" + JSON.stringify(points) + "\')");
 // console.log(JSON.stringify(algos))

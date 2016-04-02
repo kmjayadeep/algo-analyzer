@@ -1,1 +1,1 @@
-node index.js >> result.json; firefox index.html
+node index.js >> bigData.json; firefox index.html
