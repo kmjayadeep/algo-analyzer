@@ -2,29 +2,59 @@
 
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="result.json"></script>
+    <script type="text/javascript" src="bigData.json"></script>
     <script type="text/javascript">
     google.charts.load('current', {
         'packages': ['corechart']
     });
     google.charts.setOnLoadCallback(drawChart);
+    var titles, rightList = [];
+    Array.prototype.contains = function(string) {
+        for (i = 0; i < this.length; i++) {
+            if (this[i] == string)
+                return true;
+        }
+        return false;
+    };
 
     function drawChart() {
         var resultJson = JSON.parse(result);
-        console.log(result);
+        titles = resultJson[0];
+        rightList = ['pancakeSort','bubbleSort','selectionSort'];
         var data = google.visualization.arrayToDataTable(resultJson);
+        var series = {};
+        console.log(titles)
+        titles.forEach(function(item, key) {
+            var obj = {};
+            obj['targetAxisIndex'] = 0;
+            if (rightList.contains(item)) {
+                obj['targetAxisIndex'] = 1;
+            }
+            series[key - 1] = obj;
+        });
+        console.log(series);
         var options = {
             title: 'Algorithm Running times',
             curveType: 'function',
             legend: {
                 position: 'bottom'
             },
+            series: series,
             hAxis: {
                 title: 'Input Length'
             },
             vAxis: {
                 title: 'Time (ms)',
-            }
+            },
+            vAxes: {
+                0: {
+                    title: 'Time (ms)'
+                },
+                1: {
+                    title: 'Time (ms)'
+                }
+            },
+
         };
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
         chart.draw(data, options);

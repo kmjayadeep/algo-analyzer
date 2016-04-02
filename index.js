@@ -33,6 +33,7 @@ fs
 // return;
 
 var batch = [];
+var range = 999;
 var step = 1000;
 var final = 100000;
 var points = [];
@@ -44,14 +45,14 @@ algos.map(algo => {
 })
 points.push(titles);
 while (batch.length < final) {
-    batch = batch.concat(randomExt.integerArray(step, 999))
+    batch = batch.concat(randomExt.integerArray(step, range))
     console.error('n = ' + batch.length)
     var vertical = [];
     vertical.push(batch.length);
     algos.map(algo => {
         if (!algo.ignore) {
             var timeStart = Date.now()
-            algo.fun(batch)
+            var sort=algo.fun(batch)
             var timeDiff = Date.now() - timeStart
             console.error(algo.name + '\t' + timeDiff)
             algo.result.push({
