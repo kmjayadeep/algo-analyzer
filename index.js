@@ -16,29 +16,17 @@ fs
     });
 
 
-// var batch = randomExt.integerArray(20000, 999);
-// console.log(batch)
-// console.log(algos[0].fun(batch))
-
-// console.log(batch.length)
-// var timeStart = Date.now()
-// algos[1].fun(batch)
-// var timeDiff = Date.now() - timeStart
-// console.log(algos[1].name + '\t' + timeDiff)
-
-// var timeStart = Date.now()
-// algos[2].fun(batch)
-// var timeDiff = Date.now() - timeStart
-// console.log(algos[2].name + '\t' + timeDiff)
-// return;
-
+var c1 = 0.0000032;
+var c2 = 0.0010389;
 var batch = [];
 var range = 999;
 var step = 5000;
-var final = 50000;
+var final = 100000;
 var points = [];
 var titles = [];
 titles.push("Batch Length")
+titles.push("cn^2")
+titles.push("cnLogn")
 algos.map(algo => {
     if (!algo.ignore)
         titles.push(algo.name);
@@ -49,6 +37,8 @@ while (batch.length < final) {
     console.error('n = ' + batch.length)
     var vertical = [];
     vertical.push(batch.length);
+    vertical.push(c1*batch.length*batch.length);
+    vertical.push(c2*batch.length*Math.log(batch.length));
     algos.map(algo => {
         if (!algo.ignore) {
             var timeStart = Date.now()

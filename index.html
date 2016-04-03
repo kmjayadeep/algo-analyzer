@@ -37,7 +37,7 @@
             option.value = i;
             select.add(option);
         }
-        var resultJson = JSON.parse(result[0]);
+        var resultJson = JSON.parse(result[result.length-1]);
         titles = resultJson[0];
         ignoreColumns = titles.map(function(item) {
             return item;
