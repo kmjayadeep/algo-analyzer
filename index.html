@@ -2,38 +2,160 @@
 
 <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="result.json"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="bigData.json"></script>
     <script type="text/javascript">
     google.charts.load('current', {
         'packages': ['corechart']
     });
-    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(onLoad);
+    var titles, rightList = ignoreIndexes = [],
+        present;
+    ignoreColumns = [];
+    Array.prototype.contains = function(string) {
+        for (i = 0; i < this.length; i++) {
+            if (this[i] == string)
+                return true;
+        }
+        return false;
+    };
 
-    function drawChart() {
-        var resultJson = JSON.parse(result);
-        console.log(result);
+    Array.prototype.indexOf = function(string) {
+        for (i = 0; i < this.length; i++) {
+            if (this[i] == string)
+                return i;
+        }
+        return -1;
+    };
+
+    function onLoad() {
+        var select = document.getElementById('history');
+        var option;
+        for (var i = 0; i < result.length; i++) {
+            option = document.createElement('option');
+            option.text = i;
+            option.value = i;
+            select.add(option);
+        }
+        var resultJson = JSON.parse(result[result.length-1]);
+        titles = resultJson[0];
+        ignoreColumns = titles.map(function(item) {
+            return item;
+        });
+        console.log(ignoreColumns);
+        ignoreColumns.splice(0, 2);
+        console.log(ignoreColumns);
+        titles.forEach(function(item, key) {
+            if (key != 0) {
+                var checkboxArea = document.getElementById('checkbox')
+                var checkbox = document.createElement('input');
+                checkbox.type = "checkbox";
+                checkbox.name = item;
+                checkbox.value = item;
+                if (key == 1)
+                    checkbox.checked = true;
+                checkbox.id = item;
+                checkbox.onchange = function(event) {
+                    var c = event.target;
+                    if (!c.checked)
+                        ignoreColumns.push(c.name);
+                    else {
+                        var i = 0;
+                        ignoreColumns.forEach(function(item, key) {
+                            if (item == c.name)
+                                i = key;
+                        })
+                        ignoreColumns.splice(i, 1);
+                    }
+                    drawChart(present);
+
+                }
+                var label = document.createElement('label')
+                label.htmlFor = item;
+                label.appendChild(document.createTextNode(item));
+
+                checkboxArea.appendChild(checkbox);
+                checkboxArea.appendChild(label);
+                var linebreak = document.createElement("br");
+                checkboxArea.appendChild(linebreak);
+            }
+        })
+
+
+        drawChart(result.length - 1);
+    }
+
+    function drawChart(i) {
+        present = i;
+        var resultJson = JSON.parse(result[i]);
+        titles = resultJson[0];
+
+        ignoreIndexes = ignoreColumns.map(function(item) {
+            return titles.indexOf(item);
+        });
+        // rightList = ['pancakeSort','bubbleSort','selectionSort'];
         var data = google.visualization.arrayToDataTable(resultJson);
+        var series = {};
+        console.log(titles)
+        titles.forEach(function(item, key) {
+            var obj = {};
+            obj['targetAxisIndex'] = 0;
+            if (rightList.contains(item)) {
+                obj['targetAxisIndex'] = 1;
+            }
+            series[key - 1] = obj;
+        });
+        console.log(series);
         var options = {
             title: 'Algorithm Running times',
             curveType: 'function',
             legend: {
                 position: 'bottom'
             },
+            series: series,
             hAxis: {
                 title: 'Input Length'
             },
             vAxis: {
                 title: 'Time (ms)',
-            }
+            },
+            vAxes: {
+                0: {
+                    title: 'Time (ms)'
+                },
+                1: {
+                    title: 'Time (ms)'
+                }
+            },
+
         };
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-        chart.draw(data, options);
+        view = new google.visualization.DataView(data);
+        view.hideColumns(ignoreIndexes);
+        chart.draw(view, options);
+    }
+
+    function reloadGraph() {
+        var select = document.getElementById('history');
+        drawChart(select.selectedIndex)
+        console.log(select.selectedIndex);
     }
     </script>
 </head>
 
 <body>
-    <div id="curve_chart" style="width: 100%; height: 100%"></div>
+    <div class="row">
+        <div class="col-md-10">
+            <div id="curve_chart" style="height: 100%"></div>
+        </div>
+        <div class="col-md-2 center-block">
+            <h4>Select DataSet</h4>
+            <select style="width: 100%" id="history" onchange="reloadGraph()"></select>
+            <hr>
+            <h4>Select Algorithms</h4>
+            <div id="checkbox"></div>
+        </div>
+    </div>
 </body>
 
 </html>

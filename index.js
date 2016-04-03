@@ -16,42 +16,33 @@ fs
     });
 
 
-// var batch = randomExt.integerArray(20000, 999);
-// console.log(batch)
-// console.log(algos[0].fun(batch))
-
-// console.log(batch.length)
-// var timeStart = Date.now()
-// algos[1].fun(batch)
-// var timeDiff = Date.now() - timeStart
-// console.log(algos[1].name + '\t' + timeDiff)
-
-// var timeStart = Date.now()
-// algos[2].fun(batch)
-// var timeDiff = Date.now() - timeStart
-// console.log(algos[2].name + '\t' + timeDiff)
-// return;
-
+var c1 = 0.0000032;
+var c2 = 0.0010389;
 var batch = [];
-var step = 1000;
+var range = 999;
+var step = 5000;
 var final = 100000;
 var points = [];
 var titles = [];
 titles.push("Batch Length")
+titles.push("cn^2")
+titles.push("cnLogn")
 algos.map(algo => {
     if (!algo.ignore)
         titles.push(algo.name);
 })
 points.push(titles);
 while (batch.length < final) {
-    batch = batch.concat(randomExt.integerArray(step, 999))
+    batch = batch.concat(randomExt.integerArray(step, range))
     console.error('n = ' + batch.length)
     var vertical = [];
     vertical.push(batch.length);
+    vertical.push(c1*batch.length*batch.length);
+    vertical.push(c2*batch.length*Math.log(batch.length));
     algos.map(algo => {
         if (!algo.ignore) {
             var timeStart = Date.now()
-            algo.fun(batch)
+            var sort=algo.fun(batch)
             var timeDiff = Date.now() - timeStart
             console.error(algo.name + '\t' + timeDiff)
             algo.result.push({
@@ -65,5 +56,5 @@ while (batch.length < final) {
     points.push(vertical);
 }
 
-console.log("result=\'" + JSON.stringify(points) + "\';");
+console.log("result.push(\'" + JSON.stringify(points) + "\')");
 // console.log(JSON.stringify(algos))
